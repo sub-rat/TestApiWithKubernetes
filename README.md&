@@ -1,0 +1,4 @@
+# TestApiWithKubernetes
+
+Creating a Dockerfile and upload image to the docker hub and creating the kubernetes deployment pod and config with this github repo
+using argocd and a cd piplene to deploy in cluster.
