@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "frontend-config"
+  annotations:
+    magalix.com/podDeleteMatch: "app=frontend"
+data:
+  config.cfg:
+    MSG="Welcome to Kubernetes"
