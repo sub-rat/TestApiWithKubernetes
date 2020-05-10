@@ -1,19 +1,36 @@
 pipeline {
-  agent any
-  stages {
-    stage('test') {
-      agent any
-      steps {
-        echo '"Testing"'
-      }
+    environment {
+        registry = "subratgyawali/pyproj"
+        registryCredential = 'dockerhub'
+        dockerImage = ''
     }
-
-    stage('build') {
-      agent any
-      steps {
-        sh 'docker build .'
-      }
+    agent any
+    stages {
+        stage('Cloning our Git') {
+            steps {
+                git 'https://github.com/sub-rat/TestApiWithKubernetes.git'
+            }
+        }
+        stage('Building our image') {
+            steps{
+                script {
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
+            }
+        }
+        stage('Deploy our image') {
+            steps{
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+        stage('Cleaning up') {
+            steps{
+                sh "docker rmi $registry:$BUILD_NUMBER"
+            }
+        }
     }
-
-  }
 }
